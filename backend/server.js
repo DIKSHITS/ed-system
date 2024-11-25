@@ -8,12 +8,12 @@ const newuser = require('./newuser');
 
 const app = express();
 const saltRounds = 10;
-const port = process.env.PORT || 3000; // This will use the environment variable or fallback to 3000
+const port = process.env.PORT || 4000; // This will use the environment variable or fallback to 3000
 
 app.use(express.json());
 app.use(cors());
 app.use(cors({
-  origin: 'https://ed-system.onrender.com',
+  origin: 'https://localhost3000',
   credentials: true
 }));
 // Initialize express-session
