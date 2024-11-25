@@ -29,7 +29,7 @@ function DoubtsPage() {
 
   const fetchFaculties = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/faculties');
+      const response = await axios.get('https://ed-system.onrender.com/api/faculties');
       setFaculties(response.data);
     } catch (error) {
       console.error('Error fetching faculty names:', error);
@@ -38,7 +38,7 @@ function DoubtsPage() {
 
   const fetchDoubts = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/doubts');
+      const response = await axios.get('https://ed-system.onrender.com/api/doubts');
       setDoubts(response.data);
     } catch (error) {
       console.error('Error fetching doubts:', error);
@@ -55,7 +55,7 @@ function DoubtsPage() {
     formData.append('pdfFile', pdfFile);
 
     try {
-      await axios.post('http://localhost:3001/api/doubts', formData, {
+      await axios.post('https://ed-system.onrender.com/api/doubts', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
