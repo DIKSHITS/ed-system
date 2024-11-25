@@ -8,7 +8,7 @@ const newuser = require('./newuser');
 
 const app = express();
 const saltRounds = 10;
-const port = 3000;
+const port = process.env.PORT || 3000; // This will use the environment variable or fallback to 3000
 
 app.use(express.json());
 app.use(cors());
