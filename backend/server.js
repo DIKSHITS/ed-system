@@ -13,7 +13,7 @@ const port = process.env.PORT || 4000; // This will use the environment variable
 app.use(express.json());
 app.use(cors());
 app.use(cors({
-  origin: 'https://localhost3000',
+  origin: 'https://localhost4000',
   credentials: true
 }));
 // Initialize express-session
