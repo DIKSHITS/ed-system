@@ -20,7 +20,7 @@ function SolveDoubts() {
 
   const fetchDoubts = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/doubts');
+      const response = await axios.get('https://ed-system.onrender.com/api/doubts');
       setDoubts(response.data);
     } catch (error) {
       console.error('Error fetching doubts:', error);
@@ -33,7 +33,7 @@ function SolveDoubts() {
 
   const handleSendAnswer = async (doubtId) => {
     try {
-      await axios.put(`http://localhost:3001/api/doubts/${doubtId}`, { answer });
+      await axios.put(`https://ed-system.onrender.com/api/doubts/${doubtId}`, { answer });
       // Assuming you want to refresh doubts after sending answer
       fetchDoubts();
       setAnswer(''); // Clear answer field after sending
