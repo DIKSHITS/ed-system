@@ -13,7 +13,7 @@ const port = 3001;
 app.use(express.json());
 app.use(cors());
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://ed-system.onrender.com',
   credentials: true
 }));
 // Initialize express-session
