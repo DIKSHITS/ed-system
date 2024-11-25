@@ -30,7 +30,7 @@ app.use(
 
 
 // MongoDB connection
-mongoose.connect("mongodb://127.0.0.1:27017/mini-project", {
+mongoose.connect("mongodb+srv://dikshith507:Raj@2002@cluster0.61ft3.mongodb.net/mini-project", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB successfully'))
