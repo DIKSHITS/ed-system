@@ -56,7 +56,7 @@ const ManageCoursePage = () => {
 
   const fetchCourses = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/courses');
+      const response = await axios.get('https://ed-system.onrender.com/courses');
       setCourses(response.data);
     } catch (error) {
       console.error('Error fetching courses:', error);
@@ -75,7 +75,7 @@ const ManageCoursePage = () => {
 
   const addCourse = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/courses', newCourse);
+      const response = await axios.post('https://ed-system.onrender.com/courses', newCourse);
       setCourses([...courses, response.data]);
       setNewCourse({ name: '', price: '', duration: '' });
       closeForm();
@@ -86,7 +86,7 @@ const ManageCoursePage = () => {
 
   const deleteCourse = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/courses/${id}`);
+      await axios.delete(`https://ed-system.onrender.com/courses/${id}`);
       setCourses(courses.filter(course => course._id !== id));
     } catch (error) {
       console.error('Error deleting course:', error);
@@ -107,7 +107,7 @@ const ManageCoursePage = () => {
 
   const updateCourse = async () => {
     try {
-      await axios.put(`http://localhost:3001/courses/${editCourseData._id}`, newCourse);
+      await axios.put(`https://ed-system.onrender.com/courses/${editCourseData._id}`, newCourse);
       const updatedCourses = courses.map(course =>
         course._id === editCourseData._id ? { ...course, ...newCourse } : course
       );
