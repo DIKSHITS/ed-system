@@ -25,7 +25,7 @@ function Registration() {
 
   const handleRegistration = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/Registration", formData);
+      const response = await axios.post("https://ed-system.onrender.com/Registration", formData);
 
       if (response.data.message === "User registered successfully") {
         navigate("/");
