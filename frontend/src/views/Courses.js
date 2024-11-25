@@ -53,7 +53,7 @@ const CourseTable = () => {
 
   const fetchCourses = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/courses');
+      const response = await axios.get('https://ed-system.onrender.com/api/courses');
       setCourses(response.data);
     } catch (error) {
       console.error('Error fetching courses:', error);
@@ -63,7 +63,7 @@ const CourseTable = () => {
 
   const fetchSubscriptions = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/subscriptions');
+      const response = await axios.get('https://ed-system.onrender.com/api/subscriptions');
       setSubscriptions(response.data);
     } catch (error) {
       console.error('Error fetching subscriptions:', error);
@@ -76,7 +76,7 @@ const CourseTable = () => {
     
     if (confirmSubscription) {
       try {
-        await axios.post('http://localhost:3001/api/subscribe', { courseId: course._id });
+        await axios.post('https://ed-system.onrender.com/api/subscribe', { courseId: course._id });
         alert('Subscription successful!');
         fetchSubscriptions();
       } catch (error) {
@@ -91,7 +91,7 @@ const CourseTable = () => {
 
     if (confirmUnsubscribe) {
       try {
-        await axios.delete(`http://localhost:3001/api/unsubscribe/${subscription._id}`);
+        await axios.delete(`https://ed-system.onrender.com/api/unsubscribe/${subscription._id}`);
         alert('Unsubscription successful!');
         fetchSubscriptions();
       } catch (error) {
