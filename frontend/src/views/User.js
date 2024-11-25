@@ -50,7 +50,7 @@ function User() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/update-profile', {
+      const response = await axios.post('https://ed-system.onrender.com/update-profile', {
         email,
         username: formData.username,
         phone: formData.phone
