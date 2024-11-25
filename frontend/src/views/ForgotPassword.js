@@ -36,7 +36,7 @@ const ForgotPassword = () => {
       // Proceed with password reset logic
       if (newPassword === confirmPassword) {
         // Make an API request to update the new password in the database
-        const updateResponse = await axios.post('http://localhost:3001/api/update-password', {
+        const updateResponse = await axios.post('https://ed-system.onrender.com/api/update-password', {
           email,
           newPassword,
         });
