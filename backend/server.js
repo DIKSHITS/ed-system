@@ -8,7 +8,7 @@ const newuser = require('./newuser');
 
 const app = express();
 const saltRounds = 10;
-const port = 3001;
+const port = 10000;
 
 app.use(express.json());
 app.use(cors());
