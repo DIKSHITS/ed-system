@@ -24,7 +24,7 @@ function User() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get('http://localhost:3001/Profile', { params: { email } });
+        const response = await axios.get('https://ed-system.onrender.com/Profile', { params: { email } });
         setUserList(response.data);
         console.log("Fetched data:", response.data);
       } catch (error) {
