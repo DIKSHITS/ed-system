@@ -8,12 +8,12 @@ const newuser = require('./newuser');
 
 const app = express();
 const saltRounds = 10;
-
+const port = 3001;
 
 app.use(express.json());
 app.use(cors());
 app.use(cors({
-  origin: 'https://ed-system.onrender.com',
+  origin: 'http://localhost:3000',
   credentials: true
 }));
 // Initialize express-session
@@ -30,7 +30,7 @@ app.use(
 
 
 // MongoDB connection
-mongoose.connect("mongodb+srv://dikshith507:Raj@2002@cluster0.61ft3.mongodb.net", {
+mongoose.connect("mongodb://127.0.0.1:27017/mini-project", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB successfully'))
@@ -313,10 +313,10 @@ app.put('/api/updateFaculty/:id', async (req, res) => {
         const result = await NewUser.deleteOne({ _id: userId });
     
         if (result.deletedCount === 1) {
-          console.log(`User ${userId} removed successfully`);
+          console.log(User ${userId} removed successfully);
           res.status(200).json({ message: 'User removed successfully' });
         } else {
-          console.error(`User with ID ${userId} not found`);
+          console.error(User with ID ${userId} not found);
           res.status(404).json({ error: 'User not found' });
         }
       } catch (err) {
@@ -693,7 +693,7 @@ app.delete('/api/delete-exam/:examId', async (req, res) => {
 app.get('/api/facultyNames', async (req, res) => {
   try {
     // Fetch faculty names from the database where category is 'Faculty'
-    const facultyUsers = await NewUser.find({ category: 'Faculty' }).select('username');
+    const facultyUsers = await newuser.find({ category: 'Faculty' }).select('username');
     const facultyNames = facultyUsers.map(user => user.username);
     res.json(facultyNames);
   } catch (error) {
@@ -889,8 +889,6 @@ app.get('/api/schedule', async (req, res) => {
 
 
 
-
-// Mongoose Schema
 const doubtSchema = new mongoose.Schema({
   facultyName: {
     type: String,
@@ -902,28 +900,35 @@ const doubtSchema = new mongoose.Schema({
   },
   answer: {
     type: String,
-    required: true,
+    required: false, // Changed to false
   },
   pdfFile: {
     type: String,
     required: true,
   },
-});
+}, { timestamps: true });
 
 const Doubt = mongoose.model('Doubt', doubtSchema);
 
 
 
 // Route to submit doubts with file upload
+
 app.post('/api/doubts', upload.single('pdfFile'), async (req, res) => {
   try {
+    const { facultyName, doubtDescription, answer } = req.body;
+    const pdfFile = req.file ? req.file.path : null;
+
+    if (!facultyName || !doubtDescription || !pdfFile) {
+      return res.status(400).json({ error: 'Faculty name, doubt description, and PDF file are required' });
+    }
+
     // Create a new Doubt document using the data from the request body and file upload
     const newDoubt = new Doubt({
-      facultyName: req.body.facultyName,
-      answer:req.body.answer,
-      doubtDescription: req.body.doubtDescription,
-      pdfFile: req.file.path, // Assuming multer saves the file to 'uploads/' directory
-
+      facultyName,
+      doubtDescription,
+      answer: answer || '', // Set answer to an empty string if it's not provided
+      pdfFile,
     });
 
     // Save the Doubt document to the database
@@ -936,6 +941,8 @@ app.post('/api/doubts', upload.single('pdfFile'), async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
 
 
 
@@ -1080,5 +1087,5 @@ app.get('/api/subscriptions', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Example is running on port ${port}`);
+    console.log(Example is running on port ${port});
 });
