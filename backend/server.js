@@ -315,7 +315,7 @@ app.put('/api/updateFaculty/:id', async (req, res) => {
         const result = await NewUser.deleteOne({ _id: userId });
     
         if (result.deletedCount === 1) {
-          console.log(User ${userId} removed successfully);
+          console.log(`User:  ${userId} removed successfully`);
           res.status(200).json({ message: 'User removed successfully' });
         } else {
           console.error(User with ID ${userId} not found);
