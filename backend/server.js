@@ -318,7 +318,7 @@ app.put('/api/updateFaculty/:id', async (req, res) => {
           console.log(`User:  ${userId} removed successfully`);
           res.status(200).json({ message: 'User removed successfully' });
         } else {
-          console.error(User with ID ${userId} not found);
+          console.error(`User with ID ${userId} not found`);
           res.status(404).json({ error: 'User not found' });
         }
       } catch (err) {
@@ -1089,5 +1089,5 @@ app.get('/api/subscriptions', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(Example is running on port ${port});
+    console.log(`Example is running on port ${port}`);
 });
