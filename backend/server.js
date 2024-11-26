@@ -8,13 +8,15 @@ const newuser = require('./newuser');
 
 const app = express();
 const saltRounds = 10;
-const port = process.env.PORT || 4000; // Use the environment variable or fallback to 4000
+const port = process.env.PORT || 4000;
 
+// Middleware
 app.use(express.json());
 app.use(cors({
-  origin: 'https://localhost:4000', // Correct the URL format
+  origin: 'http://localhost:3000', // Adjust to your frontend's actual running port
   credentials: true
 }));
+
 
 // Initialize express-session
 app.use(
