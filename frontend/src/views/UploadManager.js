@@ -25,7 +25,7 @@ function UploadManager() {
   }, []);
 
   const fetchSubjects = () => {
-    axios.get('https://ed-system.onrender.com/subjects')
+    axios.get('http://localhost:4000/subjects')
       .then(response => {
         setSubjects(response.data);
       })
@@ -35,7 +35,7 @@ function UploadManager() {
   };
 
   const fetchCourses = () => {
-    axios.get('https://ed-system.onrender.com/courses')
+    axios.get('http://localhost:4000/courses')
       .then(response => {
         setCourses(response.data);
       })
@@ -45,7 +45,7 @@ function UploadManager() {
   };
 
   const fetchQuestionPapers = () => {
-    axios.get('https://ed-system.onrender.com/questionPapers')
+    axios.get('http://localhost:4000/questionPapers')
       .then(response => {
         setQuestionPapers(response.data);
       })
@@ -55,7 +55,7 @@ function UploadManager() {
   };
 
   const fetchNotes = () => {
-    axios.get('https://ed-system.onrender.com/notes')
+    axios.get('http://localhost:4000/notes')
       .then(response => {
         setNotes(response.data);
       })
@@ -65,7 +65,7 @@ function UploadManager() {
   };
 
   const fetchBatches = () => {
-    axios.get('https://ed-system.onrender.com/batchesiDS') // Assuming you have a route to fetch batches
+    axios.get('http://localhost:4000/batchesiDS') // Assuming you have a route to fetch batches
       .then(response => {
         setBatches(response.data);
       })
@@ -115,7 +115,7 @@ function UploadManager() {
     formData.append('file', file);
 
     // Make a POST request to the backend API endpoint
-    axios.post('https://ed-system.onrender.com/upload', formData)
+    axios.post('http://localhost:4000/upload', formData)
       .then(response => {
         console.log('File uploaded successfully');
         // Reset form fields
@@ -139,7 +139,7 @@ function UploadManager() {
     formData.append('subject', selectedSubject);
     formData.append('file', file);
 
-    axios.post('https://ed-system.onrender.com/uploadQuestion', formData)
+    axios.post('http://localhost:4000/uploadQuestion', formData)
       .then(response => {
         console.log('Question paper uploaded successfully');
         setFile(null);
@@ -155,7 +155,7 @@ function UploadManager() {
 
   const handleDelete = (id, type) => {
     if (window.confirm('Are you sure you want to delete this file?')) {
-      axios.delete(`https://ed-system.onrender.com/${type}/${id}`)
+      axios.delete(`http://localhost:4000/${type}/${id}`)
         .then(response => {
           console.log('File deleted successfully');
           if (type === 'questionPapers') {
@@ -270,7 +270,7 @@ function UploadManager() {
                         <td>{paper.batch}</td>
                         <td>{paper.subject}</td>
                         <td>
-                        <a href={`https://ed-system.onrender.com/${paper.filePath}`} target="_blank" rel="noopener noreferrer">Download</a>
+                        <a href={`http://localhost:4000/${paper.filePath}`} target="_blank" rel="noopener noreferrer">Download</a>
                         </td>
                         <td>
                           <Button color="danger" onClick={() => handleDelete(paper._id, 'questionPapers')}>Delete</Button>
@@ -299,7 +299,7 @@ function UploadManager() {
                         <td>{note.course}</td>
                         <td>{note.fileName}</td>
                         <td>
-                        <a href={`https://ed-system.onrender.com/${note.filePath}`} target="_blank" rel="noopener noreferrer">Download</a>
+                        <a href={`http://localhost:4000/${note.filePath}`} target="_blank" rel="noopener noreferrer">Download</a>
                         </td>
                         <td>
                           <Button color="danger" onClick={() => handleDelete(note._id, 'notes')}>Delete</Button>

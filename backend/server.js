@@ -13,7 +13,7 @@ const port = process.env.PORT || 4000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:3001', // Replace with the frontend's URL in production
+  origin: 'http://localhost:3000', // Replace with the frontend's URL in production
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
   credentials: true // Allow cookies if needed
 }));
@@ -93,18 +93,26 @@ app.post('/logout', (req, res) => {
 app.post('/login', async (req, res) => {
   const { email, password, category } = req.body;
   try {
-    const user = await NewUser.findOne({ email, category });
+    // Remove category from findOne to just check email
+    const user = await NewUser.findOne({ email });
+    
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+    
     const passwordMatch = await bcrypt.compare(password, user.password);
+    
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid password" });
     }
-    req.session.user = { email, category };
-    console.log(user.category)
-
-    res.status(200).json({ message: "Login successful" });
+    
+    // If you want to check category, do it here
+    if (user.category !== category) {
+      return res.status(403).json({ message: "Invalid user category" });
+    }
+    
+    req.session.user = { email, category: user.category };
+    res.status(200).json({ message: "Login successful", category: user.category });
   } catch (err) {
     console.error('Error during login:', err);
     res.status(500).json({ message: "Internal Server Error" });

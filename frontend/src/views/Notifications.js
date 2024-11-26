@@ -36,7 +36,7 @@ const Notifications = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch('https://ed-system.onrender.com/api/Faculties');
+        const response = await fetch('http://localhost:4000/api/Faculties');
         if (!response.ok) {
           throw new Error('Data could not be fetched!');
         }
@@ -77,7 +77,7 @@ const Notifications = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/api/removeUser/${removedItem._id}`,
+        `http://localhost:4000/api/removeUser/${removedItem._id}`,
         {
           method: 'DELETE',
           headers: {
@@ -117,8 +117,8 @@ const Notifications = () => {
   const handleSaveFaculties = async () => {
     try {
       const apiUrl = selectedFacultyIndex !== null
-        ? `https://ed-system.onrender.com/api/updateFaculty/${tableData[selectedFacultyIndex]._id}`
-        : 'https://ed-system.onrender.com/api/addFaculties';
+        ? `http://localhost:4000/api/updateFaculty/${tableData[selectedFacultyIndex]._id}`
+        : 'http://localhost:4000/api/addFaculties';
 
       const response = await fetch(apiUrl, {
         method: selectedFacultyIndex !== null ? 'PUT' : 'POST',

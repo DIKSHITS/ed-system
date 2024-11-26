@@ -25,7 +25,7 @@ const TableComponent = ({ onRemove }) => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch('https://ed-system.onrender.com/api/users');
+        const response = await fetch('http://localhost:4000/api/users');
         if (!response.ok) {
       
           throw new Error('Data could not be fetched!');
@@ -48,7 +48,7 @@ const TableComponent = ({ onRemove }) => {
     setTableData(updatedTableData);
 
     try {
-      const response = await fetch(`https://ed-system.onrender.com/api/removeUser/${removedItem._id}`, {
+      const response = await fetch(`http://localhost:4000/api/removeUser/${removedItem._id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ const Icons = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/addUser', {
+      const response = await fetch('http://localhost:4000/api/addUser', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

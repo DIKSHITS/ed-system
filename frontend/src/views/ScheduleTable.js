@@ -23,7 +23,7 @@ const ScheduleTable = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('https://ed-system.onrender.com/api/schedule');
+      const response = await axios.get('http://localhost:4000/api/schedule');
       setScheduleData(response.data);
     } catch (error) {
       console.error('Error fetching schedule data:', error);

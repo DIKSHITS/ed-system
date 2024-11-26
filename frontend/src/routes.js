@@ -124,7 +124,8 @@ if (userCategory === 'Student') {
       icon: "nc-icon nc-ruler-pencil",
       component: <Typography />,
       layout: "/admin",
-    }
+    },
+
   );
 } else if (userCategory === 'Faculty') {
   routes.push(

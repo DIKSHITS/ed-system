@@ -62,7 +62,7 @@ const BatchManagerPage = () => {
 
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get('https://ed-system.onrender.com/fetchSubjects');
+      const response = await axios.get('http://localhost:4000/fetchSubjects');
       setSubjects(response.data);
     } catch (error) {
       console.error('Error fetching subjects:', error);
@@ -71,7 +71,7 @@ const BatchManagerPage = () => {
 
   const fetchBatches = async () => {
     try {
-      const response = await axios.get('https://ed-system.onrender.com/fetchBatches');
+      const response = await axios.get('http://localhost:4000/fetchBatches');
       setBatches(response.data);
     } catch (error) {
       console.error('Error fetching batches:', error);
@@ -80,7 +80,7 @@ const BatchManagerPage = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get(`https://ed-system.onrender.com/fetchStudents`);
+      const response = await axios.get(`http://localhost:4000/fetchStudents`);
       setStudents(response.data);
     } catch (error) {
       console.error('Error fetching students:', error);
@@ -89,7 +89,7 @@ const BatchManagerPage = () => {
 
   const deleteBatch = async (batchID) => {
     try {
-      await axios.delete(`https://ed-system.onrender.com/deleteBatch/${batchID}`);
+      await axios.delete(`http://localhost:4000/deleteBatch/${batchID}`);
       setBatches(batches.filter(batch => batch._id !== batchID));
     } catch (error) {
       console.error('Error deleting batch:', error);
@@ -117,7 +117,7 @@ const BatchManagerPage = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.post('http://localhost:3001/addBatch', { ...newBatch, enrolledStudents: selectedStudents });
+      await axios.post('http://localhost:4000/addBatch', { ...newBatch, enrolledStudents: selectedStudents });
       setBatches([...batches, { ...newBatch, enrolledStudents: selectedStudents }]);
       setIsFormOpen(false);
       setNewBatch({ batchID: '', subject: '', enrolledStudents: [] });

@@ -13,34 +13,54 @@ function Login() {
   const cookies = new Cookies();
 
   const submit = async (e) => {
-  
     e.preventDefault();
-
+    
     // Add a validation check for empty email or password
     if (!email || !password) {
       alert("Please enter both email and password");
       return;
     }
-
+    
     try {
-      const response = await axios.post("https://ed-system.onrender.com/login", {
+      const response = await axios.post("http://localhost:4000/login", {
         email,
         password,
         category,
       });
-
+      
       if (response.data.message === "Login successful") {
-        cookies.set("user", email,category, { path: "/" });
+        // Correctly set cookies
+        cookies.set("user", email, { path: "/" });
+        cookies.set("category", response.data.category, { path: "/" });
+        
+        // Store in sessionStorage
         sessionStorage.setItem("email", email);
-        sessionStorage.setItem("category", category);
-        history("/admin", { state: { id: email } });
-      } else if (response.data.message === "User not found") {
-        alert("User not found");
-      } else if (response.data.message === "Invalid password") {
-        alert("Invalid password");
+        sessionStorage.setItem("category", response.data.category);
+        
+        // Navigate based on category if needed
+        history(response.data.category === 'admin' ? "/admin" : "/dashboard", { 
+          state: { id: email } 
+        });
       }
     } catch (error) {
-      alert("Error occurred. Please check your details and try again.");
+      if (error.response) {
+        // Handle specific error messages from backend
+        switch(error.response.data.message) {
+          case "User not found":
+            alert("User not found");
+            break;
+          case "Invalid password":
+            alert("Invalid password");
+            break;
+          case "Invalid user category":
+            alert("You do not have permission to access this account");
+            break;
+          default:
+            alert("Error occurred. Please check your details and try again.");
+        }
+      } else {
+        alert("Network error. Please try again.");
+      }
       console.error(error);
     }
   };
@@ -50,7 +70,7 @@ function Login() {
       <header className="header">
         <div className="logo-container">
           <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAhFBMVEUAAAD////8/PzDw8MiIiLHx8dkZGRvb2/5+fmbm5v29vbr6+vi4uILCwvQ0NC7u7t6enpKSkrb29uCgoIxMTGSkpInJydgYGAZGRnX19dpaWk2Njbw8PDp6eksLCyhoaFERERVVVWpqamdnZ09PT2JiYl+fn4VFRVCQkKysrJSUlIdHR1LbsVTAAAJeElEQVR4nO2caYOqOgyGKQz7KoqMI7iN6OD8//93aWEkBVRUQDw3z4ezyNbXtmmSBgUBQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEeQuOip6ug6mnhqf9bDX/tV/doG4JXcvRJ9xHtv3vaDwGZpx8vroVPTI1TJX9Y6/qrrPwfX/huOupsn9xu7ri0yE7+vdkZ2mEQzOdtTp/dfueZhURL/vr5IikEc3aha9u41PMDaJkf7nN8gpESX11Ox/Hoj04s6qSDD9d60Ggr1PHzMeu9PWelnVH3ExgzOvzA27ZsE+H1DcIidLTq5r5OBNi/ArCgtO3aJx2q68062jfe7eOdIkuCDo3PoPLZ290nxjrtzKuc6KthF/OiH5dv2K5Noi7GqZ1XZAQSRDWUKB3+6KtTOTJ7dPGgUwOgmACgW6ry37XkfwmRiciE+EDTsLWc2zqv0U/2sT8FDygULrjYtVxl721rCuWxOKn4X2eiyKve2pYZ2yJT9f8kntvoMgtLNMrCclCENJSoHH/LTx31NOR9SFQaD1ykyQYsQuwoZp2TyoUlskNL+GFzEksCMGzCrPYcjpaq0qiufD11Dws+BprkByTrXB8wpaWrL7GORsl6rUZpcJn7OJp01WrukSnjqhUKrwSOd1mvjl21a7uOFHjMi0Vys/dbjm+kXqMyD6zqGe0J+/3+dFJs7pEogPTedQxrWN/ji3LoVK/7fBYcNHM2BR+0GGa/XFeEcc3k57FpRl94Jpy1tT71s802ElVD/SkxTNO2XlVK70KvUTXEy+cPd72dmypdZmUuagYHgQTlDTYEJl+rt98xN6oOhOTtX8eNoa16zkh4pNp0dYcGPDJ1xXmC+n0xgM+mRix/CBcVHdI/F5dd49227Z8GvS+Wym8ZX/zfPpZ4RHe9IzT5/w3abeBx4I+aadQ3F67vU84hVvgI0LEHrtxSrvtp3xWVB5qp5AYV3ZS/25RKAwvbOHdHgrPYNJuA7tr37Xm3VBIzIuuzPm2ucJ9ZQuW68WrQ+EpPGIehSP4cs9zoq3Ci6FzmT/IFfqXBWZmvD9nwacmH4T6zt+B1grLSzjAlg9TCFOzDdxeeB5lS8QZ9/0eigPtFTa6eyBoyRVWtimrRP1FXy4Nm07lo4zV3QrzYgcOrseowgmvR95973xuYvZnT2cRtWQg6Sbdr7A2xhTuKFUIJgIxC89iCQsI0t4UCglLQoHN/OR+hRXnZsubTaoQZmbL24Evtnk2d4ND0xlgnIqb+xWymo4/9hF/TBQ4NxesDHb5VTyazWzDiq24YBjFDygUy0TWMaoeE2C5gAltiuv84fYZXB6YeQHfMp2KcFuqhULg3NSsJt+H5ityVjKdBfCrD7g2tVJIzMIIL2pHqEJgVJT63Xrn06Tu2hY0itru0vi0Ukh81jkN4QNV+F3+N3pFjjwkJKRW9YyxyebnORRop5CZw6YKMqpQ5U5Mtr8DK8zsjPHJmfQ465DTn7/aUmE2f3dNH1OFdiWwMCJL3gXKgEIlup0I59BCYF17l0LS7F0zr60x+M2UStOhMnQWXRVtYAdpDly9U2EzTOHP5ePSMNUrc4P6XjPgjVA/yutMYfMA/nvUICvIiWWitmC+UIf60JlCLntXxeo9sUjxWKgNjR4tKJl2ptC+do01SC9mBnXGR3Y6E96RwuzWVxIZPcYWgDWJbD7QoXkbtakeDCgUm2bYGogB+dLgciA8zMsBKRstsOaUDlTlRh9u6xmKVADzWYQXTgI5NpqybvUwuhcksrA5F+vSg6FCBXpDjGzhAf8Tqxf/ThR1qrt8kN9n+ARhTjgnsXmC8AorEulSek3hH/s17MyeFNWoS2zcV6wo5C5g4XobhXy6Y7C6nFwiNDeLhrOqCsGC7rMTeIV2CX8f4Cf2lxWuIjNJcNEw68a0pvAsMRdYUQjuxo96EIsMGFTl5gYu/Ubt+60rLBrrF0s3rxDczOTekwNh95CFji5ZZAuEApe0Q+WUBoXsM+uvu3mFINFFnBV8UsmgtRw75iieYEqJlQTb51Y0Kcw8z/jsX/IKYV8RY5cPiX0CX0gC+15DoBNzX3klilUUJUTUNFG6oFAIywlbUVjx8jTTqq777V4V6I6DSGjUBuMBk5pztsspX1IIqCgMyS2GM6UFcr6tz/mcXnHgAYUNKTiePnPezdCsAw0tEjiWmKUPxEcULq8L1DbDSStgeRU6N0L4Xo1PG3L6fkDhjQ3EF9T955kjPzOeKzgZtWIP5n6FNfcccqtspQ+K3JhB12FuMuZuKlzIWioUvi4FwNpL6qhzhWK+2ca1zWCbmUE5P9sqFOzmN46HXicKyvwm3RWacWmklDpey/MZrRVm8a9bramJ3M0wgmoASRYdqd9cs1gBjFfYoMYNang6/Hx+cM+v/huW6w2e3j+zVf8IckOw5d75lqhz+Zuf0PhaqQqoHlueFNVTldMgKcQ2TOLcvKRQotGm9vJ9cElEnSqF2921Hgx3xlZJnKMaeUqK60biPlRVuB/hiwsCW/Zj6oqH3GzUmsqHb9GUnBwFmYPKunHNrdvm/dMxWY10oNI1MabOx57fCozvdSndlfC6JeIGUzH3P75MTqN1n8b4QxjvzxYcpcJJDnjXxLzDcw4NW9j01L4uyCyNTxeOY8q70ZHe1q7KfnaXPpv4NIFG2Mv4e5fPs2huqzyEQgf6K0pq7mCWEvGbWsNJdRPRT2525DIiB+E4+l8tmjgkYqtETaNx4yX9pUkrzJYjf5Ofkk1HkyWJl2lFI9Gky+33RBYN6mNd8zlUq6iEtdf11yj8XdjwG3cqLbcxsjn8opD3bjKNcV7uM22oFBJ9N1A2q9yrs1eTg5S77dnoDt5gkBZknWLmI26bVotKi3lpWr7vW/G5m7Pum/uvbvc9hDLR0g3914d3oa6Lg45PZ7w/w9AINTWL3PrPk2tFQRRat5oOU1fSKQeLiLt8j9r2aqmmEucnOyNt2lEeP/udQaygSLtsAimqZ0YNl4aXv87w+xNdobgR+L2+2VeQLmLT0ERRy6yNrOd+2tQYqGqmH+wwjUmcemVNhT3f/2z2qyLetaeWNW6Xuw0/iRwR00221Sj+M5ug/vusg9eZeelCI9rCXQeeEm5DL9lJkbjQR/s7Ng9ymq5TyfEtayG7u+m/8pu9CIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIg/0/+A8o5c4C8YliVAAAAAElFTkSuQmCC" alt="Logo" className="logo" />
-          <h1>Library Management System</h1>
+          <h1>OnlineEd Solutions</h1>
         </div>
       </header>
       <nav className="navbar">

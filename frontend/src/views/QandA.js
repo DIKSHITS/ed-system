@@ -11,6 +11,7 @@ import {
   Input,
   Button,
   Table,
+  Alert,
 } from 'reactstrap';
 
 function DoubtsPage() {
@@ -19,6 +20,7 @@ function DoubtsPage() {
   const [pdfFile, setPdfFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [faculties, setFaculties] = useState([]);
   const [doubts, setDoubts] = useState([]);
 
@@ -29,7 +31,7 @@ function DoubtsPage() {
 
   const fetchFaculties = async () => {
     try {
-      const response = await axios.get('https://ed-system.onrender.com/api/faculties');
+      const response = await axios.get('http://localhost:4000/api/faculties');
       setFaculties(response.data);
     } catch (error) {
       console.error('Error fetching faculty names:', error);
@@ -38,7 +40,7 @@ function DoubtsPage() {
 
   const fetchDoubts = async () => {
     try {
-      const response = await axios.get('https://ed-system.onrender.com/api/doubts');
+      const response = await axios.get('http://localhost:4000/api/doubts');
       setDoubts(response.data);
     } catch (error) {
       console.error('Error fetching doubts:', error);
@@ -47,15 +49,17 @@ function DoubtsPage() {
 
   const handleSubmit = async () => {
     setError('');
+    setSuccess('');
     setLoading(true);
 
     const formData = new FormData();
     formData.append('facultyName', facultyName);
     formData.append('doubtDescription', doubtDescription);
+    formData.append('answer', ''); // Send an empty string for answer initially
     formData.append('pdfFile', pdfFile);
 
     try {
-      await axios.post('https://ed-system.onrender.com/api/doubts', formData, {
+      await axios.post('http://localhost:4000/api/doubts', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -64,6 +68,7 @@ function DoubtsPage() {
       setFacultyName('');
       setDoubtDescription('');
       setPdfFile(null);
+      setSuccess('Doubt submitted successfully!');
       fetchDoubts(); // Refresh the doubts list after submission
     } catch (error) {
       console.error('Error submitting doubt:', error);
@@ -73,8 +78,8 @@ function DoubtsPage() {
     }
   };
 
-  const handleFileChange = (file) => {
-    setPdfFile(file);
+  const handleFileChange = (e) => {
+    setPdfFile(e.target.files[0]);
   };
 
   return (
@@ -86,7 +91,8 @@ function DoubtsPage() {
               <h5 className="title">Submit Doubts</h5>
             </CardHeader>
             <CardBody>
-              {error && <div className="text-danger">{error}</div>}
+              {error && <Alert color="danger">{error}</Alert>}
+              {success && <Alert color="success">{success}</Alert>}
               <FormGroup>
                 <Label for="facultyName">Faculty Name:</Label>
                 <Input
@@ -118,11 +124,11 @@ function DoubtsPage() {
                   type="file"
                   id="pdfFile"
                   accept=".pdf"
-                  onChange={(e) => handleFileChange(e.target.files[0])}
+                  onChange={handleFileChange}
                 />
               </FormGroup>
               <Button color="primary" onClick={handleSubmit} disabled={loading}>
-                Submit
+                {loading ? 'Submitting...' : 'Submit'}
               </Button>
             </CardBody>
           </Card>

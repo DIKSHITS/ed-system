@@ -33,7 +33,7 @@ function Typography() {
 
   const fetchExams = async () => {
     try {
-      const response = await axios.get("https://ed-system.onrender.com/api/exams");
+      const response = await axios.get("http://localhost:4000/api/exams");
       setExams(response.data);
     } catch (error) {
       console.error("Error fetching exams:", error);
@@ -43,7 +43,7 @@ function Typography() {
 
   const fetchBatchIds = async () => {
     try {
-      const response = await axios.get("https://ed-system.onrender.com/api/batchIds");
+      const response = await axios.get("http://localhost:4000/api/batchIds");
       setBatchIds(response.data);
     } catch (error) {
       console.error("Error fetching batch IDs:", error);
@@ -53,7 +53,7 @@ function Typography() {
 
   const fetchFacultyNames = async () => {
     try {
-      const response = await axios.get("https://ed-system.onrender.com/api/facultyNames");
+      const response = await axios.get("http://localhost:4000/api/facultyNames");
       setFacultyNames(response.data);
     } catch (error) {
       console.error("Error fetching faculty names:", error);
@@ -74,7 +74,7 @@ function Typography() {
 
     try {
       const response = await axios.post(
-        "https://ed-system.onrender.com/api/add-exam",
+        "http://localhost:4000/api/add-exam",
         formData,
         {
           headers: {
@@ -103,7 +103,7 @@ function Typography() {
 
   const handleDeleteExam = async (examId) => {
     try {
-      await axios.delete(`https://ed-system.onrender.com/api/delete-exam/${examId}`);
+      await axios.delete(`http://localhost:4000/api/delete-exam/${examId}`);
       await fetchExams();
     } catch (error) {
       console.error("Error deleting exam:", error);
@@ -212,7 +212,7 @@ function Typography() {
                         <td>{exam.facultyName}</td>
                         <td>
                           <a
-                            href={`https://ed-system.onrender.com/${exam.questionsFile}`}
+                            href={`http://localhost:4000/${exam.questionsFile}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
