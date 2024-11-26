@@ -8,6 +8,8 @@
     "@mui/icons-material": "^6.1.8",
     "@mui/material": "^6.1.8",
     "@mui/x-date-pickers": "^7.4.0",
+    "ajv": "^6.12.6",
+    "ajv-keywords": "^3.5.2",
     "axios": "^1.6.7",
     "bootstrap": "4.6.2",
     "chart.js": "3.9.1",
@@ -23,6 +25,7 @@
     "react-scripts": "^5.0.1",
     "reactstrap": "8.10.0",
     "sass": "1.62.1",
+    "schema-utils": "^2.7.1",
     "universal-cookie": "^7.1.0",
     "validator": "^13.11.0"
   },
