@@ -33,47 +33,48 @@ app.use(
 
 
 // MongoDB connection
-mongoose.connect("mongodb://127.0.0.1:27017/mini-project", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log('Connected to MongoDB successfully'))
-.catch(err => console.log('Error connecting to MongoDB:', err));
+mongoose.connect("mongodb+srv://dikshith507:Raj%402002@cluster0.61ft3.mongodb.net/myDatabase?retryWrites=true&w=majority", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+  .then(() => console.log('Connected to MongoDB successfully'))
+  .catch(err => console.log('Error connecting to MongoDB:', err));
 
 
 
 
 
-    app.post('/Registration', async (req, res) => {
-        const { username, email, password, phone, category,experience,subject} = req.body; // Changed to category
-        try {
-            const existingUser = await NewUser.findOne({ email });
-            if (existingUser) {
-                return res.status(400).json({ message: "User already exists" });
-            }
+app.post('/Registration', async (req, res) => {
+  const { username, email, password, phone, category, experience, subject } = req.body; // Changed to category
+  try {
+    const existingUser = await NewUser.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
 
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    
-            const newUser = new NewUser({ username, email, password:hashedPassword, phone, category,experience,subject }); // Changed to userType
-            await newUser.save();
-            res.status(201).json({ message: "User registered successfully" });
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-        }
-    });
-    
 
-    const isAuthenticated = (req, res, next) => {
-      // Check if the user is authenticated
-      if (req.session.user) {
-        // User is authenticated, proceed to the next middleware
-        next();
-      } else {
-        // User is not authenticated, redirect to login page or send an error response
-        res.status(401).json({ message: 'Unauthorized' });
-      }
-    };
-    
+    const newUser = new NewUser({ username, email, password: hashedPassword, phone, category, experience, subject }); // Changed to userType
+    await newUser.save();
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
+const isAuthenticated = (req, res, next) => {
+  // Check if the user is authenticated
+  if (req.session.user) {
+    // User is authenticated, proceed to the next middleware
+    next();
+  } else {
+    // User is not authenticated, redirect to login page or send an error response
+    res.status(401).json({ message: 'Unauthorized' });
+  }
+};
+
 // Assuming you have a route for logout, it might look like this
 app.post('/logout', (req, res) => {
   // Clear the session or authentication state
@@ -87,12 +88,12 @@ app.post('/logout', (req, res) => {
   });
 });
 
-    
+
 // Login endpoint
 app.post('/login', async (req, res) => {
-  const { email, password,category } = req.body;
+  const { email, password, category } = req.body;
   try {
-    const user = await NewUser.findOne({ email,category });
+    const user = await NewUser.findOne({ email, category });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -100,7 +101,7 @@ app.post('/login', async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid password" });
     }
-    req.session.user = { email,category };
+    req.session.user = { email, category };
     console.log(user.category)
 
     res.status(200).json({ message: "Login successful" });
@@ -133,19 +134,19 @@ app.get('/Profile', async (req, res) => {
 app.post('/update-profile', async (req, res) => {
   const { email, username, phone } = req.body;
   try {
-      const updatedUser = await NewUser.findOneAndUpdate(
-          { email },
-          { $set: { username, phone } },
-          { new: true } // Return the updated document
-      );
-      if (updatedUser) {
-          return res.json({ message: 'Profile updated successfully.', user: updatedUser });
-      } else {
-          return res.status(404).json({ error: 'User not found.' });
-      }
+    const updatedUser = await NewUser.findOneAndUpdate(
+      { email },
+      { $set: { username, phone } },
+      { new: true } // Return the updated document
+    );
+    if (updatedUser) {
+      return res.json({ message: 'Profile updated successfully.', user: updatedUser });
+    } else {
+      return res.status(404).json({ error: 'User not found.' });
+    }
   } catch (error) {
-      console.error('Error updating profile:', error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error updating profile:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
@@ -154,46 +155,46 @@ app.post('/update-profile', async (req, res) => {
 
 
 app.post('/api/check-email', async (req, res) => {
-    const { email } = req.body;
-  
-    try {
-      const user = await NewUser.findOne({ email });
-  
-      if (user) {
-        // Email exists in the database
-        return res.json({ exists: true });
-      } else {
-        // Email does not exist in the database
-        return res.json({ exists: false });
-      }
-    } catch (error) {
-      console.error('Error checking email:', error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
+  const { email } = req.body;
+
+  try {
+    const user = await NewUser.findOne({ email });
+
+    if (user) {
+      // Email exists in the database
+      return res.json({ exists: true });
+    } else {
+      // Email does not exist in the database
+      return res.json({ exists: false });
     }
-  });
-  
-  app.post('/api/update-password', async (req, res) => {
-      const { email, newPassword } = req.body;
-    
-      try {
-        // Find the user by email and update the password
-        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-        const updatedUser = await NewUser.findOneAndUpdate(
-          { email },
-          { $set: { password: hashedPassword} },
-          { new: true }
-        );
-    
-        if (updatedUser) {
-          return res.json({ message: 'Password updated successfully.' });
-        } else {
-          return res.status(404).json({ error: 'User not found.' });
-        }
-      } catch (error) {
-        console.error('Error updating password:', error.message);
-        res.status(500).json({ error: 'Internal Server Error' });
-      }
-    });  
+  } catch (error) {
+    console.error('Error checking email:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/api/update-password', async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  try {
+    // Find the user by email and update the password
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    const updatedUser = await NewUser.findOneAndUpdate(
+      { email },
+      { $set: { password: hashedPassword } },
+      { new: true }
+    );
+
+    if (updatedUser) {
+      return res.json({ message: 'Password updated successfully.' });
+    } else {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+  } catch (error) {
+    console.error('Error updating password:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 // GET all users
@@ -241,7 +242,7 @@ app.post('/api/addUser', async (req, res) => {
 // API endpoint to add a new user
 app.post('/api/addFaculties', async (req, res) => {
   try {
-    const { username, phone, email, category,subject,experience} = req.body;
+    const { username, phone, email, category, subject, experience } = req.body;
 
     // Create a new user instance using the NewUser model
     const newUser = new NewUser({
@@ -267,8 +268,8 @@ app.post('/api/addFaculties', async (req, res) => {
 app.get('/api/Faculties', async (req, res) => {
   try {
     // Assuming you have a model named NewUser
-    const users = await NewUser.find({category:"Faculty"});
-   
+    const users = await NewUser.find({ category: "Faculty" });
+
     // Send the filtered users as a JSON response
     res.json(users);
   } catch (error) {
@@ -306,27 +307,27 @@ app.put('/api/updateFaculty/:id', async (req, res) => {
 
 
 
-      
- 
 
-    app.delete('/api/removeUser/:id', async (req, res) => {
-      const userId = req.params.id;
-    
-      try {
-        const result = await NewUser.deleteOne({ _id: userId });
-    
-        if (result.deletedCount === 1) {
-          console.log(`User:  ${userId} removed successfully`);
-          res.status(200).json({ message: 'User removed successfully' });
-        } else {
-          console.error(`User with ID ${userId} not found`);
-          res.status(404).json({ error: 'User not found' });
-        }
-      } catch (err) {
-        console.error('Error removing user:', err);
-        res.status(500).json({ error: 'Internal Server Error' });
-      }
-    });
+
+
+app.delete('/api/removeUser/:id', async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const result = await NewUser.deleteOne({ _id: userId });
+
+    if (result.deletedCount === 1) {
+      console.log(`User:  ${userId} removed successfully`);
+      res.status(200).json({ message: 'User removed successfully' });
+    } else {
+      console.error(`User with ID ${userId} not found`);
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (err) {
+    console.error('Error removing user:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 // Course schema
@@ -385,12 +386,12 @@ app.delete('/courses/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-    
+
 
 
 app.get('/api/subjects', async (req, res) => {
   try {
-    const subjects = await NewUser.find({category:"Faculty"});
+    const subjects = await NewUser.find({ category: "Faculty" });
     res.json(subjects);
   } catch (error) {
     console.error("Error fetching subjects:", error);
@@ -400,14 +401,14 @@ app.get('/api/subjects', async (req, res) => {
 
 app.get('/api/faculties', async (req, res) => {
   try {
-    const subjects = await NewUser.find({category:"Faculty"});
+    const subjects = await NewUser.find({ category: "Faculty" });
     res.json(subjects);
   } catch (error) {
     console.error("Error fetching subjects:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
-    
+
 
 const batchSchema = new mongoose.Schema({
   faculty: String,
@@ -423,12 +424,12 @@ const Batch = mongoose.model('Batch', batchSchema);
 app.post('/api/batches', async (req, res) => {
   try {
     const { selectedBatchId, faculty, link, date, time } = req.body; // Add time
-  //  console.log("Received data:", req.body); // Debugging: Log received data
+    //  console.log("Received data:", req.body); // Debugging: Log received data
     //console.log("Time value:", time); // Debugging: Log time value
     const newBatch = new Batch({ selectedBatchId, faculty, link, date, time }); // Include time
-   // console.log("New Batch object:", newBatch); // Debugging: Log new Batch object
+    // console.log("New Batch object:", newBatch); // Debugging: Log new Batch object
     await newBatch.save();
-   // console.log("Batch saved successfully:", newBatch); // Debugging: Log saved Batch object
+    // console.log("Batch saved successfully:", newBatch); // Debugging: Log saved Batch object
     res.status(201).json({ message: 'Batch added successfully', batch: newBatch });
   } catch (error) {
     console.error('Error adding batch:', error);
@@ -450,7 +451,7 @@ app.get('/api/batches', async (req, res) => {
 
 app.get('/api/selectBatch', async (req, res) => {
   try {
-    const batches = await dik.find({},'batchID');
+    const batches = await dik.find({}, 'batchID');
     res.json(batches);
   } catch (error) {
     console.error('Error fetching batches:', error);
@@ -461,8 +462,8 @@ app.get('/api/selectBatch', async (req, res) => {
 // Endpoint to delete a batch
 app.delete('/api/deletebatchess', async (req, res) => {
   try {
-    const {  } = req.params;
-    await Batch.deleteOne({  });
+    const { } = req.params;
+    await Batch.deleteOne({});
     res.json({ message: 'Batch deleted successfully' });
   } catch (error) {
     console.error('Error deleting batch:', error);
@@ -511,8 +512,8 @@ app.post('/addBatch', async (req, res) => {
 // Endpoint to delete a batch
 app.delete('/deleteBatch/:batchID', async (req, res) => {
   try {
-    const {  } = req.params;
-    await dik.deleteOne({  });
+    const { } = req.params;
+    await dik.deleteOne({});
     res.json({ message: 'Batch deleted successfully' });
   } catch (error) {
     console.error('Error deleting batch:', error);
@@ -526,7 +527,7 @@ app.get('/fetchSubjects', async (req, res) => {
   try {
     // Assuming you have a Course model in your database with a field called 'name'
     const subjects = await Course.find({}, 'name');
-    
+
     res.json(subjects);
   } catch (error) {
     console.error('Error fetching subjects:', error);
@@ -538,7 +539,7 @@ app.get('/fetchStudents', async (req, res) => {
   try {
     // Assuming you have a Course model in your database with a field called 'name'
     const subjects = await newuser.find({}, 'username');
-    
+
     res.json(subjects);
   } catch (error) {
     console.error('Error fetching subjects:', error);
@@ -548,7 +549,7 @@ app.get('/fetchStudents', async (req, res) => {
 
 
 
-   
+
 
 
 
@@ -613,7 +614,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   limits: {
     fileSize: 10 * 1024 * 1024 // Limit file size to 10MB
@@ -722,7 +723,7 @@ const uploadSchema = new mongoose.Schema({
   filePath: String,
   course: String,
   uploadedAt: { type: Date, default: Date.now }
-  
+
 });
 
 // Define separate schema for question uploads
@@ -741,10 +742,10 @@ const QuestionUpload = mongoose.model('QuestionUpload', questionUploadSchema);
 
 // Multer storage configuration
 const storageConfig = multer.diskStorage({
-  destination: function(req, file, cb) {
+  destination: function (req, file, cb) {
     cb(null, 'uploads/');
   },
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     cb(null, file.originalname);
   }
 });
@@ -967,7 +968,7 @@ app.put('/api/doubts/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { answer } = req.body;
-    
+
     // Find the doubt by id
     const doubt = await Doubt.findById(id);
     if (!doubt) {
@@ -1027,7 +1028,7 @@ const subscriptionSchema = new mongoose.Schema({
     ref: 'Course',
     required: true,
   },
-  
+
 });
 
 const Subscription = mongoose.model('Subscription', subscriptionSchema);
@@ -1090,5 +1091,5 @@ app.get('/api/subscriptions', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Example is running on port ${port}`);
+  console.log(`Example is running on port ${port}`);
 });
