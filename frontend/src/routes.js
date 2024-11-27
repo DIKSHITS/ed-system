@@ -33,14 +33,14 @@ if (userCategory === 'Student') {
       name: "Dashboard",
       icon: "nc-icon nc-chart-bar-32",
       component: <Dashboard />,
-      layout: "/admin/dashboard",
+      layout: "/admin",
     },
     {
       path: "/user-page",
       name: "Profile",
       icon: "nc-icon nc-bookmark-2",
       component: <UserPage />,
-      layout: "/admin/dashboard",
+      layout: "/admin",
       category:"admin"
     },
     {
@@ -48,21 +48,21 @@ if (userCategory === 'Student') {
       name: "My Classes",
       icon: "nc-icon nc-tv-2",
       component: <Liveclass />,
-      layout: "/admin/dashboard",
+      layout: "/admin",
     },
     {
       path: "/Courses",
       name: "My Courses",
       icon: "nc-icon nc-hat-3",
       component: <Courses />,
-      layout: "/admin/dashboard",
+      layout: "/admin",
     },
     {
       path: "/QandA",
       name: "Question and Answer",
       icon: "nc-icon nc-bulb-63",
       component: <QandA />,
-      layout: "/admin/dashboard",
+      layout: "/admin",
     }
   );
 } else if (userCategory === 'admin') {
@@ -72,7 +72,7 @@ if (userCategory === 'Student') {
       name: "Dashboard",
       icon: "nc-icon nc-chart-bar-32",
       component: <Dashboard />,
-      layout: "/admin/dashboard",
+      layout: "/admin",
     },
     {
       path: "/user-page",
@@ -80,7 +80,7 @@ if (userCategory === 'Student') {
       icon: "nc-icon nc-bookmark-2",
       component: <UserPage />,
       layout: "/admin",
-      category:"/admin/dashboard"
+      category:"admin"
     },
   
     {
@@ -88,42 +88,42 @@ if (userCategory === 'Student') {
       name: "Manage Student",
       icon: "nc-icon nc-single-02",
       component: <Icons />,
-      layout: "/admin/dashboard",
+      layout: "/admin",
     },
     {
       path: "/notifications",
       name: "Manage Faculties",
       icon: "nc-icon nc-hat-3",
       component: <Notifications />,
-      layout: "/admin/dashboard",
+      layout: "/admin",
     },
     {
       path: "/ManageCoursePage",
       name: "Manage Course",
       icon: "nc-icon nc-book-bookmark",
       component: <ManageCoursePage />,
-      layout: "/admin/dashboard",
+      layout: "/admin",
     },
     {
       path: "/BatchManager",
       name: "Batch Manage",
       icon: "nc-icon nc-watch-time",
       component: <BatchManager />,
-      layout: "/admin/dashboard",
+      layout: "/admin",
     },
     {
       path: "/tables",
       name: "Manage Schedule",
       icon: "nc-icon nc-calendar-60",
       component: <TableList />,
-      layout: "/admin/dashboard",
+      layout: "/admin",
     },
     {
       path: "/typography",
       name: "Manage Exam",
       icon: "nc-icon nc-ruler-pencil",
       component: <Typography />,
-      layout: "/admin/dashboard",
+      layout: "/admin",
     },
 
   );
