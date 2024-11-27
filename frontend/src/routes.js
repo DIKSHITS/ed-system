@@ -16,8 +16,11 @@ import ScheduleTable from "views/ScheduleTable.js";
 import SolveDoubts from "views/SolveDoubts.js";
 
 function getUserCategory() {
-  return sessionStorage.getItem("category");
+  const category = sessionStorage.getItem("category");
+  console.log("Retrieved Category: ", category); // Debugging line
+  return category;
 }
+
 
 const Routes = () => {
   const [routes, setRoutes] = useState([]);
