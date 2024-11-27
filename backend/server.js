@@ -12,6 +12,11 @@ const port = process.env.PORT || 4000;
 
 // Middleware
 app.use(express.json());
+// app.use(cors({
+//   origin: 'http://localhost:3001', // Replace with the frontend's URL in production
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+//   credentials: true // Allow cookies if needed
+// }));
 app.use(cors({
   origin: 'https://ed-system-frontend.onrender.com', // Replace with the frontend's URL in production
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods

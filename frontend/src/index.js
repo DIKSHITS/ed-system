@@ -25,12 +25,11 @@ root.render(
 
       {/* Admin Layout */}
       <Route path="/admin/*" element={<AdminLayout />} />
-
       {/* Redirect admin base path */}
       <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
 
       {/* Catch-all route */}
-    
+      <Route path="*" element={<div>404 - Not Found</div>} />
     </Routes>
   </BrowserRouter>
-);
+); 

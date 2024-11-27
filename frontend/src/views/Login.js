@@ -13,54 +13,31 @@ function Login() {
   const cookies = new Cookies();
 
   const submit = async (e) => {
+
     e.preventDefault();
-    
     // Add a validation check for empty email or password
     if (!email || !password) {
       alert("Please enter both email and password");
       return;
     }
-    
     try {
       const response = await axios.post("https://ed-system.onrender.com/login", {
         email,
         password,
         category,
       });
-      
       if (response.data.message === "Login successful") {
-        // Correctly set cookies
-        cookies.set("user", email, { path: "/" });
-        cookies.set("category", response.data.category, { path: "/" });
-        
-        // Store in sessionStorage
+        cookies.set("user", email,category, { path: "/" });
         sessionStorage.setItem("email", email);
-        sessionStorage.setItem("category", response.data.category);
-        
-        // Navigate based on category if needed
-        history(response.data.category === 'admin' ? "/admin" : "/dashboard", { 
-          state: { id: email } 
-        });
+        sessionStorage.setItem("category", category);
+        history("/admin", { state: { id: email } });
+      } else if (response.data.message === "User not found") {
+        alert("User not found");
+      } else if (response.data.message === "Invalid password") {
+        alert("Invalid password");
       }
     } catch (error) {
-      if (error.response) {
-        // Handle specific error messages from backend
-        switch(error.response.data.message) {
-          case "User not found":
-            alert("User not found");
-            break;
-          case "Invalid password":
-            alert("Invalid password");
-            break;
-          case "Invalid user category":
-            alert("You do not have permission to access this account");
-            break;
-          default:
-            alert("Error occurred. Please check your details and try again.");
-        }
-      } else {
-        alert("Network error. Please try again.");
-      }
+      alert("Error occurred. Please check your details and try again.");
       console.error(error);
     }
   };
