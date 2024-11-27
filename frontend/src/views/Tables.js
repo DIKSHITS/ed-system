@@ -34,7 +34,7 @@ function Tables() {
 
   const fetchFaculties = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/faculties");
+      const response = await fetch("https://ed-system.onrender.com/api/faculties");
       const data = await response.json();
       setFaculties(data);
     } catch (error) {
@@ -44,7 +44,7 @@ function Tables() {
   
   const fetchBatches = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/batches");
+      const response = await fetch("https://ed-system.onrender.com/api/batches");
       const data = await response.json();
       setBatches(data);
     } catch (error) {
@@ -54,7 +54,7 @@ function Tables() {
 
   const fetchBatchIDs = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/selectBatch");
+      const response = await fetch("https://ed-system.onrender.com/api/selectBatch");
       if (!response.ok) {
         throw new Error(`Failed to fetch batch IDs: ${response.statusText}`);
       }
@@ -74,7 +74,7 @@ function Tables() {
     }
 
     try {
-      const response = await fetch('http://localhost:4000/api/batches', {
+      const response = await fetch('https://ed-system.onrender.com/api/batches', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ function Tables() {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/api/deletebatchess`, {
+      const response = await fetch(`https://ed-system.onrender.com/api/deletebatchess`, {
         method: 'DELETE',
       });
 

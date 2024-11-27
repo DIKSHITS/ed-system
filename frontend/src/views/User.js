@@ -24,7 +24,7 @@ function User() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get('http://localhost:4000/Profile', { params: { email } });
+        const response = await axios.get('https://ed-system.onrender.com/Profile', { params: { email } });
         setUserList(response.data);
         console.log("Fetched data:", response.data);
       } catch (error) {
@@ -50,7 +50,7 @@ function User() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/update-profile', {
+      const response = await axios.post('https://ed-system.onrender.com/update-profile', {
         email,
         username: formData.username,
         phone: formData.phone
