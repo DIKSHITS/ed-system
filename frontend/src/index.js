@@ -1,13 +1,21 @@
 /*!
+
 =========================================================
 * Paper Dashboard React - v1.3.2
 =========================================================
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 2023 Creative Tim
-* Licensed under MIT
-=========================================================
-*/
 
+* Product Page: https://www.creative-tim.com/product/paper-dashboard-react
+* Copyright 2023 Creative Tim (https://www.creative-tim.com)
+
+* Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/main/LICENSE.md)
+
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
@@ -19,44 +27,20 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 import AdminLayout from "layouts/Admin.js";
 import Login from './views/Login';
-import Registration from './views/Registration';
+import Registration from './views/Registration'; // Import your Dashboard component
 import ForgotPassword from './views/ForgotPassword';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-// Error Boundary to catch rendering errors
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error("Error caught in Error Boundary: ", error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return <h1>Something went wrong. Please try again later.</h1>;
-    }
-    return this.props.children;
-  }
-}
-
 root.render(
   <BrowserRouter>
-    <ErrorBoundary>
-      <Routes>
-        <Route path="/admin/*" element={<AdminLayout />} />
-        <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
-        <Route path="/" element={<Login />} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/forgotpassword" element={<ForgotPassword />} />
-      </Routes>
-    </ErrorBoundary>
+    <Routes>
+      <Route path="/admin/*" element={<AdminLayout />} />
+      <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+      <Route path="/" element={<Login />} />
+     
+       <Route path="/Registration" element={<Registration />} />
+       <Route path="/ForgotPassword" element={<ForgotPassword />} />
+    </Routes>
   </BrowserRouter>
 );
