@@ -1,172 +1,55 @@
-import React from 'react';
-import Dashboard from "views/Dashboard.js";
-import Notifications from "views/Notifications.js";
-import Icons from "views/Icons.js";
-import Typography from "views/Typography.js";
-import TableList from "views/Tables.js";
-import UserPage from "views/User.js";
-import ManageCoursePage from "views/ManageCoursePage.js";
-import BatchManager from "views/BatchManager.js";
-import Courses from "views/Courses";
-import Liveclass from "views/Liveclass";
-import QandA from "views/QandA";
+import React, { lazy } from 'react';
 
-import UploadManager from "views/UploadManager.js";
-import ScheduleTable from "views/ScheduleTable.js";
-import SolveDoubts from "views/SolveDoubts.js";
+// Lazy load components
+const Dashboard = lazy(() => import("views/Dashboard.js"));
+const Notifications = lazy(() => import("views/Notifications.js"));
+const Icons = lazy(() => import("views/Icons.js"));
+const Typography = lazy(() => import("views/Typography.js"));
+const TableList = lazy(() => import("views/Tables.js"));
+const UserPage = lazy(() => import("views/User.js"));
+const ManageCoursePage = lazy(() => import("views/ManageCoursePage.js"));
+const BatchManager = lazy(() => import("views/BatchManager.js"));
+const Courses = lazy(() => import("views/Courses"));
+const Liveclass = lazy(() => import("views/Liveclass"));
+const QandA = lazy(() => import("views/QandA"));
+const UploadManager = lazy(() => import("views/UploadManager.js"));
+const ScheduleTable = lazy(() => import("views/ScheduleTable.js"));
+const SolveDoubts = lazy(() => import("views/SolveDoubts.js"));
 
 // Function to get user's category from session
-function getUserCategory() {
-  return sessionStorage.getItem("category");
+function getUser Category() {
+  return sessionStorage.getItem("category") || 'Guest'; // Default to 'Guest' if not found
 }
 
-const userCategory = getUserCategory();
+const userCategory = getUser Category();
 
-// Initial routes without conditional components
-let routes = [];
+// Define routes based on user category
+const routes = {
+  Student: [
+    { path: "/dashboard", name: "Dashboard", icon: "nc-icon nc-chart-bar-32", component: Dashboard },
+    { path: "/user-page", name: "Profile", icon: "nc-icon nc-bookmark-2", component: UserPage },
+    { path: "/Liveclass", name: "My Classes", icon: "nc-icon nc-tv-2", component: Liveclass },
+    { path: "/Courses", name: "My Courses", icon: "nc-icon nc-hat-3", component: Courses },
+    { path: "/QandA", name: "Question and Answer", icon: "nc-icon nc-bulb-63", component: QandA },
+  ],
+  admin: [
+    { path: "/dashboard", name: "Dashboard", icon: "nc-icon nc-chart-bar-32", component: Dashboard },
+    { path: "/user-page", name: "Profile", icon: "nc-icon nc-bookmark-2", component: UserPage },
+    { path: "/Icons", name: "Manage Student", icon: "nc-icon nc-single-02", component: Icons },
+    { path: "/notifications", name: "Manage Faculties", icon: "nc-icon nc-hat-3", component: Notifications },
+    { path: "/ManageCoursePage", name: "Manage Course", icon: "nc-icon nc-book-bookmark", component: ManageCoursePage },
+    { path: "/BatchManager", name: "Batch Manage", icon: "nc-icon nc-watch-time", component: BatchManager },
+    { path: "/tables", name: "Manage Schedule", icon: "nc-icon nc-calendar-60", component: TableList },
+    { path: "/typography", name: "Manage Exam", icon: "nc-icon nc-ruler-pencil", component: Typography },
+  ],
+  Faculty: [
+    { path: "/dashboard", name: "Dashboard", icon: "nc-icon nc-chart-bar-32", component: Dashboard },
+    { path: "/SolveDoubts", name: "Question and Answer", icon: "nc-icon nc-bulb-63", component: SolveDoubts },
+    { path: "/user-page", name: "Profile", icon: "nc-icon nc-bookmark-2", component: UserPage },
+    { path: "/UploadManager", name: "Manager Upload", icon: "nc-icon nc-cloud-upload-94", component: UploadManager },
+    { path: "/ScheduleTable", name: "My Schedule", icon: "nc-icon nc-calendar-60", component: ScheduleTable },
+  ],
+};
 
-// Conditionally include components based on user's category
-if (userCategory === 'Student') {
-  routes.push(
-    {
-      path: "/dashboard",
-      name: "Dashboard",
-      icon: "nc-icon nc-chart-bar-32",
-      component: <Dashboard />,
-      layout: "/admin",
-    },
-    {
-      path: "/user-page",
-      name: "Profile",
-      icon: "nc-icon nc-bookmark-2",
-      component: <UserPage />,
-      layout: "/admin",
-      category:"admin"
-    },
-    {
-      path: "/Liveclass",
-      name: "My Classes",
-      icon: "nc-icon nc-tv-2",
-      component: <Liveclass />,
-      layout: "/admin",
-    },
-    {
-      path: "/Courses",
-      name: "My Courses",
-      icon: "nc-icon nc-hat-3",
-      component: <Courses />,
-      layout: "/admin",
-    },
-    {
-      path: "/QandA",
-      name: "Question and Answer",
-      icon: "nc-icon nc-bulb-63",
-      component: <QandA />,
-      layout: "/admin",
-    }
-  );
-} else if (userCategory === 'admin') {
-  routes.push(
-    {
-      path: "/dashboard",
-      name: "Dashboard",
-      icon: "nc-icon nc-chart-bar-32",
-      component: <Dashboard />,
-      layout: "/admin",
-    },
-    {
-      path: "/user-page",
-      name: "Profile",
-      icon: "nc-icon nc-bookmark-2",
-      component: <UserPage />,
-      layout: "/admin",
-      category:"admin"
-    },
-  
-    {
-      path: "/Icons",
-      name: "Manage Student",
-      icon: "nc-icon nc-single-02",
-      component: <Icons />,
-      layout: "/admin",
-    },
-    {
-      path: "/notifications",
-      name: "Manage Faculties",
-      icon: "nc-icon nc-hat-3",
-      component: <Notifications />,
-      layout: "/admin",
-    },
-    {
-      path: "/ManageCoursePage",
-      name: "Manage Course",
-      icon: "nc-icon nc-book-bookmark",
-      component: <ManageCoursePage />,
-      layout: "/admin",
-    },
-    {
-      path: "/BatchManager",
-      name: "Batch Manage",
-      icon: "nc-icon nc-watch-time",
-      component: <BatchManager />,
-      layout: "/admin",
-    },
-    {
-      path: "/tables",
-      name: "Manage Schedule",
-      icon: "nc-icon nc-calendar-60",
-      component: <TableList />,
-      layout: "/admin",
-    },
-    {
-      path: "/typography",
-      name: "Manage Exam",
-      icon: "nc-icon nc-ruler-pencil",
-      component: <Typography />,
-      layout: "/admin",
-    },
-
-  );
-} else if (userCategory === 'Faculty') {
-  routes.push(
-    {
-      path: "/dashboard",
-      name: "Dashboard",
-      icon: "nc-icon nc-chart-bar-32",
-      component: <Dashboard />,
-      layout: "/admin",
-    },
-    {
-      path: "/SolveDoubts",
-      name: "Question and Answer",
-      icon: "nc-icon nc-bulb-63",
-      component: <SolveDoubts />,
-      layout: "/admin",
-    },
-  
-    {
-      path: "/user-page",
-      name: "Profile",
-      icon: "nc-icon nc-bookmark-2",
-      component: <UserPage />,
-      layout: "/admin",
-      category:"admin"
-    },
-    {
-      path: "/UploadManager",
-      name: "Manager upload",
-      icon: "nc-icon nc-cloud-upload-94",
-      component: <UploadManager />,
-      layout: "/admin",
-    },
-    {
-      path: "/ScheduleTable",
-      name: "My Schedule",
-      icon: "nc-icon nc-calendar-60",
-      component: <ScheduleTable />,
-      layout: "/admin",
-    }
-  );
-} 
-
-export default routes;
+// Export the routes based on the user category
+export default routes[userCategory] || [];
