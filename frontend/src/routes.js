@@ -151,7 +151,7 @@ if (userCategory === 'Student') {
       component: <UserPage />,
       layout: "/admin",
       category:"admin"
-    },a
+    },
     {
       path: "/UploadManager",
       name: "Manager upload",
