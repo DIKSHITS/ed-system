@@ -47,15 +47,20 @@ mongoose.connect("mongodb+srv://dikshith507:Raj%402002@cluster0.61ft3.mongodb.ne
 
 /** 🛠️ Middleware: Token Verification **/
 const verifyToken = (req, res, next) => {
+  console.log("Authorization Header:", req.headers.authorization);
+
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized: No token provided" });
+    console.error("No token provided");
+    return res.status(401).json({ message: "Unauthorized: No token" });
   }
 
   jwt.verify(token, "your_secret_key", (err, decoded) => {
     if (err) {
+      console.error("JWT Verification Error:", err);
       return res.status(401).json({ message: "Unauthorized: Invalid token" });
     }
+    console.log("Token verified, user:", decoded);
     req.user = decoded;
     next();
   });
@@ -64,12 +69,22 @@ const verifyToken = (req, res, next) => {
 
 // 📊 Admin Dashboard Route (Protected)
 app.get("/admin/dashboard", verifyToken, async (req, res) => {
+  console.log("Received request for dashboard");
+
   try {
+    if (!req.user) {
+      console.error("User not authenticated");
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    console.log("User:", req.user);
     res.status(200).json({ message: "Dashboard data", data: {} });
   } catch (err) {
+    console.error("Error in dashboard:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 
 app.post('/Registration', async (req, res) => {
   const { username, email, password, phone, category, experience, subject } = req.body; // Changed to category
