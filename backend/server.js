@@ -67,7 +67,7 @@ const verifyToken = (req, res, next) => {
 
 
 
-router.get("/admin/dashboard", verifyToken, async (req, res) => {
+app.get("/admin/dashboard", verifyToken, async (req, res) => {
   try {
     console.log("Received request at /admin/dashboard");
     console.log("User data:", req.user);
