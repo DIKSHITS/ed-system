@@ -47,30 +47,30 @@ mongoose.connect("mongodb+srv://dikshith507:Raj%402002@cluster0.61ft3.mongodb.ne
 
 /** 🛠️ Middleware: Token Verification **/
 const verifyToken = (req, res, next) => {
-  console.log("Authorization Header:", req.headers.authorization);
-
   const token = req.headers.authorization?.split(" ")[1];
+
   if (!token) {
-    console.error("No token provided");
+    console.log("No token provided!");
     return res.status(401).json({ message: "Unauthorized: No token" });
   }
 
   jwt.verify(token, "your_secret_key", (err, decoded) => {
     if (err) {
-      console.error("JWT Verification Error:", err);
+      console.log("Invalid token:", err.message);
       return res.status(401).json({ message: "Unauthorized: Invalid token" });
     }
-    console.log("Token verified, user:", decoded);
+    console.log("Token verified:", decoded);
     req.user = decoded;
     next();
   });
 };
 
 
+
 app.get("/admin/dashboard", verifyToken, async (req, res) => {
   try {
-    console.log("Request received at /admin/dashboard");
-    console.log("User data:", req.user);  // Check if token is decoded correctly
+    console.log("Received request at /admin/dashboard");
+    console.log("User data:", req.user);
 
     res.status(200).json({
       message: "Dashboard data",
@@ -80,10 +80,11 @@ app.get("/admin/dashboard", verifyToken, async (req, res) => {
       followers: 1200,
     });
   } catch (err) {
-    console.error("Dashboard Route Error:", err);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Dashboard Error:", err);
+    res.status(500).json({ message: "Internal Server Error", error: err.message });
   }
 });
+
 
 
 
