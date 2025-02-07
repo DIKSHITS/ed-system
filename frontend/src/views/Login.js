@@ -1,44 +1,45 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Cookies from 'universal-cookie';
-import './login.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import Cookies from "universal-cookie";
+import "./login.css";
 
 function Login() {
-  const history = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [category, setCategory] = useState('');
- 
+  const navigate = useNavigate(); // ✅ Renamed from history to navigate
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [category, setCategory] = useState("");
   const cookies = new Cookies();
 
   const submit = async (e) => {
-
     e.preventDefault();
-    // Add a validation check for empty email or password
+
+    // ✅ Validation for empty fields
     if (!email || !password) {
       alert("Please enter both email and password");
       return;
     }
+
     try {
-      const response = await axios.post("https://ed-system.onrender.com/login", {
-        email,
-        password,
-        category,
-      });
+      const response = await axios.post(
+        "https://ed-system.onrender.com/login",
+        { email, password, category }, // ✅ Fixed headers issue
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+      );
+
+      console.log("Backend Response:", response.data); // ✅ Debugging backend response
+
       if (response.data.message === "Login successful") {
-        cookies.set("user", email,category, { path: "/" });
+        cookies.set("user", { email, category }, { path: "/" }); // ✅ Fixed cookie set
         sessionStorage.setItem("email", email);
         sessionStorage.setItem("category", category);
-        history("/admin", { state: { id: email } });
-      } else if (response.data.message === "User not found") {
-        alert("User not found");
-      } else if (response.data.message === "Invalid password") {
-        alert("Invalid password");
+        navigate("/admin", { state: { id: email } }); // ✅ Fixed navigation
+      } else {
+        alert(response.data.message || "Invalid credentials"); // ✅ Generalized error message
       }
     } catch (error) {
       alert("Error occurred. Please check your details and try again.");
-      console.error(error);
+      console.error("Login Error:", error);
     }
   };
 
