@@ -39,10 +39,10 @@ function Dashboard() {
     <div className="content">
       <Row>
         {[
-          { title: "Capacity", value: dashboardData?.capacity, icon: "nc-globe", color: "warning" },
-          { title: "Revenue", value: `$${dashboardData?.revenue || "0"}`, icon: "nc-money-coins", color: "success" },
-          { title: "Errors", value: dashboardData?.errors || "0", icon: "nc-vector", color: "danger" },
-          { title: "Followers", value: `+${dashboardData?.followers || "0"}K`, icon: "nc-favourite-28", color: "primary" },
+          { title: "Total Students", value: dashboardData?.totalStudents || "0", icon: "nc-hat-3", color: "info" },
+          { title: "Active Courses", value: dashboardData?.activeCourses || "0", icon: "nc-book-bookmark", color: "success" },
+          { title: "Completed Courses", value: dashboardData?.completedCourses || "0", icon: "nc-check-2", color: "warning" },
+          { title: "Total Teachers", value: dashboardData?.totalTeachers || "0", icon: "nc-single-02", color: "primary" },
         ].map((item, index) => (
           <Col lg="3" md="6" sm="6" key={index}>
             <Card className="card-stats">
@@ -75,8 +75,8 @@ function Dashboard() {
         <Col md="12">
           <Card>
             <CardHeader>
-              <CardTitle tag="h5">Users Behavior</CardTitle>
-              <p className="card-category">24 Hours performance</p>
+              <CardTitle tag="h5">Student Engagement</CardTitle>
+              <p className="card-category">Weekly Activity Performance</p>
             </CardHeader>
             <CardBody>
               <Line data={dashboard24HoursPerformanceChart.data} options={dashboard24HoursPerformanceChart.options} width={400} height={100} />
