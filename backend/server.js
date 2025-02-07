@@ -124,6 +124,15 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// 📊 Admin Dashboard Route (Protected)
+app.get("/admin/dashboard", verifyToken, async (req, res) => {
+  try {
+    res.status(200).json({ message: "Dashboard data", data: {} });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 
 app.get('/Profile', async (req, res) => {
   const { email } = req.query; // Assuming you're sending email as a query parameter
