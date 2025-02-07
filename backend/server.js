@@ -45,9 +45,31 @@ mongoose.connect("mongodb+srv://dikshith507:Raj%402002@cluster0.61ft3.mongodb.ne
   .then(() => console.log('Connected to MongoDB successfully'))
   .catch(err => console.log('Error connecting to MongoDB:', err));
 
+/** 🛠️ Middleware: Token Verification **/
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized: No token provided" });
+  }
+
+  jwt.verify(token, "your_secret_key", (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Unauthorized: Invalid token" });
+    }
+    req.user = decoded;
+    next();
+  });
+};
 
 
-
+// 📊 Admin Dashboard Route (Protected)
+app.get("/admin/dashboard", verifyToken, async (req, res) => {
+  try {
+    res.status(200).json({ message: "Dashboard data", data: {} });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 app.post('/Registration', async (req, res) => {
   const { username, email, password, phone, category, experience, subject } = req.body; // Changed to category
@@ -124,14 +146,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// 📊 Admin Dashboard Route (Protected)
-app.get("/admin/dashboard", verifyToken, async (req, res) => {
-  try {
-    res.status(200).json({ message: "Dashboard data", data: {} });
-  } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
+
 
 
 app.get('/Profile', async (req, res) => {
