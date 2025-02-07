@@ -67,23 +67,35 @@ const verifyToken = (req, res, next) => {
 
 
 
+// Dashboard Route (Protected)
 app.get("/admin/dashboard", verifyToken, async (req, res) => {
   try {
-    console.log("Received request at /admin/dashboard");
-    console.log("User data:", req.user);
+    console.log("📌 Received request at /admin/dashboard");
+    console.log("👤 User data:", req.user);
 
-    res.status(200).json({
-      message: "Dashboard data",
+    // Simulating database fetch (Replace this with actual DB call)
+    const dashboardData = {
       capacity: 100,
       revenue: 5000,
       errors: 2,
       followers: 1200,
+    };
+
+    res.status(200).json({
+      success: true,
+      message: "Dashboard data fetched successfully",
+      data: dashboardData,
     });
   } catch (err) {
-    console.error("Dashboard Error:", err);
-    res.status(500).json({ message: "Internal Server Error", error: err.message });
+    console.error("❌ Dashboard Error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: err.message,
+    });
   }
 });
+
 
 
 
