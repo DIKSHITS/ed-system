@@ -28,13 +28,7 @@ let routes = [];
 // Conditionally include components based on user's category
 if (userCategory === 'Student') {
   routes.push(
-    {
-      path: "/dashboard",
-      name: "Dashboard",
-      icon: "nc-icon nc-chart-bar-32",
-      component: <Dashboard />,
-      layout: "/admin",
-    },
+    
     {
       path: "/user-page",
       name: "Profile",
@@ -67,13 +61,7 @@ if (userCategory === 'Student') {
   );
 } else if (userCategory === 'admin') {
   routes.push(
-    {
-      path: "/dashboard",
-      name: "Dashboard",
-      icon: "nc-icon nc-chart-bar-32",
-      component: <Dashboard />,
-      layout: "/admin",
-    },
+   
     {
       path: "/user-page",
       name: "Profile",
@@ -129,13 +117,7 @@ if (userCategory === 'Student') {
   );
 } else if (userCategory === 'Faculty') {
   routes.push(
-    {
-      path: "/dashboard",
-      name: "Dashboard",
-      icon: "nc-icon nc-chart-bar-32",
-      component: <Dashboard />,
-      layout: "/admin",
-    },
+   
     {
       path: "/SolveDoubts",
       name: "Question and Answer",
