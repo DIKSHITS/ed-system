@@ -17,7 +17,7 @@ function Dashboard() {
         });
         setDashboardData(response.data);
       } catch (err) {
-        setError(err.response?.data?.message || "Error fetching data");
+        setError(err.response?.data?.message || "Server error. Please try again later.");
       } finally {
         setLoading(false);
       }
