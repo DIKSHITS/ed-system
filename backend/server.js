@@ -67,23 +67,24 @@ const verifyToken = (req, res, next) => {
 };
 
 
-// 📊 Admin Dashboard Route (Protected)
 app.get("/admin/dashboard", verifyToken, async (req, res) => {
-  console.log("Received request for dashboard");
-
   try {
-    if (!req.user) {
-      console.error("User not authenticated");
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+    console.log("Request received at /admin/dashboard");
+    console.log("User data:", req.user);  // Check if token is decoded correctly
 
-    console.log("User:", req.user);
-    res.status(200).json({ message: "Dashboard data", data: {} });
+    res.status(200).json({
+      message: "Dashboard data",
+      capacity: 100,
+      revenue: 5000,
+      errors: 2,
+      followers: 1200,
+    });
   } catch (err) {
-    console.error("Error in dashboard:", err);
+    console.error("Dashboard Route Error:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 
 
 app.post('/Registration', async (req, res) => {
