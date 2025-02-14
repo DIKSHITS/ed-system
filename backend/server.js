@@ -44,48 +44,66 @@ mongoose.connect("mongodb+srv://dikshith507:Raj%402002@cluster0.61ft3.mongodb.ne
 })
   .then(() => console.log('Connected to MongoDB successfully'))
   .catch(err => console.log('Error connecting to MongoDB:', err));
+app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 
-/** 🛠️ Middleware: Token Verification **/
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-
-  if (!token) {
-    console.log("No token provided!");
-    return res.status(401).json({ message: "Unauthorized: No token" });
-  }
-
-  jwt.verify(token, "your_secret_key", (err, decoded) => {
-    if (err) {
-      console.log("Invalid token:", err.message);
-      return res.status(401).json({ message: "Unauthorized: Invalid token" });
-    }
-    console.log("Token verified:", decoded);
-    req.user = decoded;
-    next();
-  });
-};
-
-
-
-app.get("/admin/dashboard", verifyToken, async (req, res) => {
-  try {
-    console.log("Received request at /admin/dashboard");
-    console.log("User data:", req.user);
-
-    const demoData = {
-      message: "Dashboard data",
-      totalStudents: 1500,
-      activeCourses: 120,
-      completedCourses: 300,
-      totalTeachers: 50,
-    };
-
-    res.status(200).json(demoData);
-  } catch (err) {
-    console.error("Dashboard Error:", err);
-    res.status(500).json({ message: "Internal Server Error", error: err.message });
+const DashboardSchema = new mongoose.Schema({
+  totalStudents: {
+    type: Number,
+    required: true,
+  },
+  activeCourses: {
+    type: Number,
+    required: true,
+  },
+  completedCourses: {
+    type: Number,
+    required: true,
+  },
+  totalTeachers: {
+    type: Number,
+    required: true,
+  },
+  weeklyEngagement: {
+    type: [Number],
+    required: true,
   }
 });
+
+module.exports = mongoose.model('Dashboard', DashboardSchema);
+
+// GET Dashboard Data
+router.get('/', async (req, res) => {
+  try {
+    const dashboardData = await Dashboard.findOne(); 
+    res.json(dashboardData);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Seed Data (Optional: For initial testing)
+router.post('/seed', async (req, res) => {
+  try {
+    const newData = new Dashboard({
+      totalStudents: 120,
+      activeCourses: 8,
+      completedCourses: 5,
+      totalTeachers: 12,
+      weeklyEngagement: [50, 65, 80, 70, 90, 100, 85]
+    });
+    await newData.save();
+    res.send('Data Seeded');
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+
+
+
 
 
 
