@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Line } from "react-chartjs-2";
-import { Card, CardHeader, CardBody, CardFooter, CardTitle, Row, Col, Spinner } from "reactstrap";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  CardTitle,
+  Row,
+  Col,
+  Spinner,
+} from "reactstrap";
 import { dashboard24HoursPerformanceChart } from "variables/charts.js";
 
 function Dashboard() {
@@ -23,32 +32,46 @@ function Dashboard() {
       });
   }, []);
 
-  if (loading)
-    return (
-      <div className="text-center">
-        <Spinner color="primary" />
-        <p>Loading...</p>
-      </div>
-    );
-
-  if (error) return <p className="text-danger">Error: {error}</p>;
-
   return (
     <div className="content">
       <Row>
         {[
-          { title: "Total Students", value: dashboardData?.totalStudents || "0", icon: "nc-hat-3", color: "info" },
-          { title: "Active Courses", value: dashboardData?.activeCourses || "0", icon: "nc-book-bookmark", color: "success" },
-          { title: "Completed Courses", value: dashboardData?.completedCourses || "0", icon: "nc-check-2", color: "warning" },
-          { title: "Total Teachers", value: dashboardData?.totalTeachers || "0", icon: "nc-single-02", color: "primary" },
+          {
+            title: "Total Students",
+            value: dashboardData?.totalStudents || "0",
+            icon: "nc-hat-3",
+            color: "info",
+          },
+          {
+            title: "Active Courses",
+            value: dashboardData?.activeCourses || "0",
+            icon: "nc-book-bookmark",
+            color: "success",
+          },
+          {
+            title: "Completed Courses",
+            value: dashboardData?.completedCourses || "0",
+            icon: "nc-check-2",
+            color: "warning",
+          },
+          {
+            title: "Total Teachers",
+            value: dashboardData?.totalTeachers || "0",
+            icon: "nc-single-02",
+            color: "primary",
+          },
         ].map((item, index) => (
           <Col lg="3" md="6" sm="6" key={index}>
             <Card className="card-stats">
               <CardBody>
                 <Row>
                   <Col md="4" xs="5">
-                    <div className={icon-big text-center icon-${item.color}}>
-                      <i className={nc-icon ${item.icon} text-${item.color}} />
+                    <div
+                      className={`icon-big text-center icon-${item.color}`}
+                    >
+                      <i
+                        className={`nc-icon ${item.icon} text-${item.color}`}
+                      />
                     </div>
                   </Col>
                   <Col md="8" xs="7">
@@ -96,3 +119,5 @@ function Dashboard() {
     </div>
   );
 }
+
+export default Dashboard;
