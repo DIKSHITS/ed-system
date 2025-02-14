@@ -61,13 +61,7 @@ if (userCategory === 'Student') {
   );
 } else if (userCategory === 'admin') {
   routes.push(
-    {
-      path: "/dashboard",
-      name: "Dashboard",
-      icon: "nc-icon nc-chart-bar-32",
-      component: <Dashboard />,
-      layout: "/admin/dashboard",
-    },
+  
    
     {
       path: "/user-page",
