@@ -10,19 +10,17 @@ function Dashboard() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("https://ed-system.onrender.com/admin/dashboard", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
+    // Fetch data from the API
+    axios
+      .get("https://ed-system.onrender.com/api/dashboard")
+      .then((response) => {
         setDashboardData(response.data);
-      } catch (err) {
-        setError(err.response?.data?.message || "Server error. Please try again later.");
-      } finally {
         setLoading(false);
-      }
-    };
-    fetchData();
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      });
   }, []);
 
   if (loading)
@@ -79,7 +77,12 @@ function Dashboard() {
               <p className="card-category">Weekly Activity Performance</p>
             </CardHeader>
             <CardBody>
-              <Line data={dashboard24HoursPerformanceChart.data} options={dashboard24HoursPerformanceChart.options} width={400} height={100} />
+              <Line
+                data={dashboard24HoursPerformanceChart.data}
+                options={dashboard24HoursPerformanceChart.options}
+                width={400}
+                height={100}
+              />
             </CardBody>
             <CardFooter>
               <hr />
