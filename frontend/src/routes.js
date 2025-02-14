@@ -29,11 +29,12 @@ let routes = [];
 if (userCategory === 'Student') {
   routes.push(
      {
-      path: "/dashboard",
+      path: "/Dashboard"
       name: "Dashboard",
-      icon: "nc-icon nc-chart-bar-32",
+      icon: "nc-icon nc-bookmark-2",
       component: <Dashboard />,
       layout: "/admin",
+      category:"admin"
     },
     
     {
@@ -69,11 +70,12 @@ if (userCategory === 'Student') {
 } else if (userCategory === 'admin') {
   routes.push(
    {
-      path: "/dashboard",
+      path: "/Dashboard"
       name: "Dashboard",
-      icon: "nc-icon nc-chart-bar-32",
+      icon: "nc-icon nc-bookmark-2",
       component: <Dashboard />,
       layout: "/admin",
+      category:"admin"
     },
    
     {
