@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Line } from "react-chartjs-2";
-import { Card, CardHeader, CardBody, CardFooter, CardTitle, Row, Col, Spinner } from "reactstrap";
-import { dashboard24HoursPerformanceChart } from "variables/charts.js";
+import { Line, Pie } from "react-chartjs-2";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  CardTitle,
+  Row,
+  Col,
+  Spinner,
+} from "reactstrap";
 
 function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -10,30 +18,16 @@ function Dashboard() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const isBackendAvailable = window.location.hostname !== "ed-system-frontend.onrender.com";
-
-    if (isBackendAvailable) {
-      // Fetch data from the API when backend is available
-      axios
-        .get("https://ed-system.onrender.com/api/dashboard")
-        .then((response) => {
-          setDashboardData(response.data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          setError(error.message);
-          setLoading(false);
-        });
-    } else {
-      // Mocked Data for frontend-only deployment
-      setDashboardData({
-        totalStudents: "120",
-        activeCourses: "8",
-        completedCourses: "5",
-        totalTeachers: "12",
+    axios
+      .get("https://ed-system.onrender.com/api/dashboard")
+      .then((response) => {
+        setDashboardData(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
       });
-      setLoading(false);
-    }
   }, []);
 
   if (loading)
@@ -50,10 +44,30 @@ function Dashboard() {
     <div className="content">
       <Row>
         {[
-          { title: "Total Students", value: dashboardData?.totalStudents || "0", icon: "nc-hat-3", color: "info" },
-          { title: "Active Courses", value: dashboardData?.activeCourses || "0", icon: "nc-book-bookmark", color: "success" },
-          { title: "Completed Courses", value: dashboardData?.completedCourses || "0", icon: "nc-check-2", color: "warning" },
-          { title: "Total Teachers", value: dashboardData?.totalTeachers || "0", icon: "nc-single-02", color: "primary" },
+          {
+            title: "Total Students",
+            value: dashboardData?.totalStudents || "0",
+            icon: "nc-hat-3",
+            color: "info",
+          },
+          {
+            title: "Active Courses",
+            value: dashboardData?.activeCourses || "0",
+            icon: "nc-book-bookmark",
+            color: "success",
+          },
+          {
+            title: "Completed Courses",
+            value: dashboardData?.completedCourses || "0",
+            icon: "nc-check-2",
+            color: "warning",
+          },
+          {
+            title: "Total Teachers",
+            value: dashboardData?.totalTeachers || "0",
+            icon: "nc-single-02",
+            color: "primary",
+          },
         ].map((item, index) => (
           <Col lg="3" md="6" sm="6" key={index}>
             <Card className="card-stats">
@@ -91,9 +105,28 @@ function Dashboard() {
             </CardHeader>
             <CardBody>
               <Line
-                data={dashboard24HoursPerformanceChart.data}
-                options={dashboard24HoursPerformanceChart.options}
-                width={400}
+                data={{
+                  labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                  datasets: [
+                    {
+                      label: "Engagement",
+                      data: dashboardData?.weeklyEngagement || [0, 0, 0, 0, 0, 0, 0],
+                      borderColor: "rgba(75,192,192,1)",
+                      backgroundColor: "rgba(75,192,192,0.2)",
+                      pointBorderColor: "rgba(75,192,192,1)",
+                      pointBackgroundColor: "#fff",
+                      pointBorderWidth: 1,
+                    },
+                  ],
+                }}
+                options={{
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                    },
+                  },
+                }}
                 height={100}
               />
             </CardBody>
