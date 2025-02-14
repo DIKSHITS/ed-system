@@ -44,37 +44,24 @@ mongoose.connect("mongodb+srv://dikshith507:Raj%402002@cluster0.61ft3.mongodb.ne
 })
   .then(() => console.log('Connected to MongoDB successfully'))
   .catch(err => console.log('Error connecting to MongoDB:', err));
-app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 
-const DashboardSchema = new mongoose.Schema({
-  totalStudents: {
-    type: Number,
-    required: true,
-  },
-  activeCourses: {
-    type: Number,
-    required: true,
-  },
-  completedCourses: {
-    type: Number,
-    required: true,
-  },
-  totalTeachers: {
-    type: Number,
-    required: true,
-  },
-  weeklyEngagement: {
-    type: [Number],
-    required: true,
-  }
-});
-
-module.exports = mongoose.model('Dashboard', DashboardSchema);
 
 // GET Dashboard Data
-router.get('/', async (req, res) => {
+app.get('/api/dashboard', async (req, res) => {
   try {
-    const dashboardData = await Dashboard.findOne(); 
+    let dashboardData = await Dashboard.findOne(); 
+
+    // If no data is found, insert demo data
+    if (!dashboardData) {
+      dashboardData = new Dashboard({
+        totalStudents: 500,
+        activeCourses: 20,
+        completedCourses: 15,
+        totalTeachers: 30,
+      });
+      await dashboardData.save();
+    }
+
     res.json(dashboardData);
   } catch (err) {
     console.error(err.message);
@@ -82,23 +69,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Seed Data (Optional: For initial testing)
-router.post('/seed', async (req, res) => {
-  try {
-    const newData = new Dashboard({
-      totalStudents: 120,
-      activeCourses: 8,
-      completedCourses: 5,
-      totalTeachers: 12,
-      weeklyEngagement: [50, 65, 80, 70, 90, 100, 85]
-    });
-    await newData.save();
-    res.send('Data Seeded');
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
-});
+
+
 
 
 
