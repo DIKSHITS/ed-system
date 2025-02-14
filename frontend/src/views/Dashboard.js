@@ -10,17 +10,30 @@ function Dashboard() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch data from the API
-    axios
-      .get("https://ed-system.onrender.com/api/dashboard")
-      .then((response) => {
-        setDashboardData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setLoading(false);
+    const isBackendAvailable = window.location.hostname !== "ed-system-frontend.onrender.com";
+
+    if (isBackendAvailable) {
+      // Fetch data from the API when backend is available
+      axios
+        .get("https://ed-system.onrender.com/api/dashboard")
+        .then((response) => {
+          setDashboardData(response.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          setError(error.message);
+          setLoading(false);
+        });
+    } else {
+      // Mocked Data for frontend-only deployment
+      setDashboardData({
+        totalStudents: "120",
+        activeCourses: "8",
+        completedCourses: "5",
+        totalTeachers: "12",
       });
+      setLoading(false);
+    }
   }, []);
 
   if (loading)
