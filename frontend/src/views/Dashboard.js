@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Line } from "react-chartjs-2";
 import {
   Card,
@@ -8,43 +9,37 @@ import {
   CardTitle,
   Row,
   Col,
+  Spinner,
 } from "reactstrap";
 
 function Dashboard() {
-  // Static data for demonstration
-  const dashboardData = {
-    totalStudents: 120,
-    activeCourses: 15,
-    completedCourses: 30,
-    totalTeachers: 10,
-    weeklyEngagement: [12, 19, 3, 5, 2, 3, 7],
-  };
-
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(false);
   return (
     <div className="content">
       <Row>
         {[
           {
             title: "Total Students",
-            value: dashboardData.totalStudents,
+            value: dashboardData?.totalStudents || "0",
             icon: "nc-hat-3",
             color: "info",
           },
           {
             title: "Active Courses",
-            value: dashboardData.activeCourses,
+            value: dashboardData?.activeCourses || "0",
             icon: "nc-book-bookmark",
             color: "success",
           },
           {
             title: "Completed Courses",
-            value: dashboardData.completedCourses,
+            value: dashboardData?.completedCourses || "0",
             icon: "nc-check-2",
             color: "warning",
           },
           {
             title: "Total Teachers",
-            value: dashboardData.totalTeachers,
+            value: dashboardData?.totalTeachers || "0",
             icon: "nc-single-02",
             color: "primary",
           },
@@ -76,7 +71,6 @@ function Dashboard() {
           </Col>
         ))}
       </Row>
-
       <Row>
         <Col md="12">
           <Card>
@@ -91,7 +85,7 @@ function Dashboard() {
                   datasets: [
                     {
                       label: "Engagement",
-                      data: dashboardData.weeklyEngagement,
+                      data: dashboardData?.weeklyEngagement || [0, 0, 0, 0, 0, 0, 0],
                       borderColor: "rgba(75,192,192,1)",
                       backgroundColor: "rgba(75,192,192,0.2)",
                       pointBorderColor: "rgba(75,192,192,1)",
@@ -125,4 +119,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
