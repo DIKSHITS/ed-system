@@ -10,7 +10,7 @@ import BatchManager from "views/BatchManager.js";
 import Courses from "views/Courses";
 import Liveclass from "views/Liveclass";
 import QandA from "views/QandA";
-import Dashboard from "views/Dashboard.js";
+//import Dashboard from "views/Dashboard.js";
 import UploadManager from "views/UploadManager.js";
 import ScheduleTable from "views/ScheduleTable.js";
 import SolveDoubts from "views/SolveDoubts.js";
@@ -28,13 +28,7 @@ let routes = [];
 // Conditionally include components based on user's category
 if (userCategory === 'Student') {
   routes.push(
-     {
-      path: "/dashboard",
-      name: "Dashboard",
-      icon: "nc-icon nc-chart-bar-32",
-      component: <Dashboard />,
-      layout: "/admin",
-    },
+   
     
     {
       path: "/user-page",
@@ -68,13 +62,7 @@ if (userCategory === 'Student') {
   );
 } else if (userCategory === 'admin') {
   routes.push(
-   {
-      path: "/dashboard",
-      name: "Dashboard",
-      icon: "nc-icon nc-chart-bar-32",
-      component: <Dashboard />,
-      layout: "/admin",
-    },
+ 
    
     {
       path: "/user-page",
@@ -131,13 +119,7 @@ if (userCategory === 'Student') {
   );
 } else if (userCategory === 'Faculty') {
   routes.push(
-     {
-      path: "/dashboard",
-      name: "Dashboard",
-      icon: "nc-icon nc-chart-bar-32",
-      component: <Dashboard />,
-      layout: "/admin",
-    },
+  
    
     {
       path: "/SolveDoubts",
