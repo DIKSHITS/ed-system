@@ -66,7 +66,7 @@ if (userCategory === 'Student') {
       name: "Dashboard",
       icon: "nc-icon nc-chart-bar-32",
       component: <Dashboard />,
-      layout: "/admin",
+      layout: "/admin/dashboard",
     },
    
     {
